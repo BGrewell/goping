@@ -27,7 +27,7 @@ func getListener() (*icmp.PacketConn, error) {
 	return conn, err
 }
 
-func Ping(target string, timeout int) (*net.IPAddr, time.Duration, error) {
+func Ping(target string, timeout time.Duration) (*net.IPAddr, time.Duration, error) {
 
 	// Get a listener so we can hear the ping reply
 	conn, err := getListener()
@@ -76,7 +76,7 @@ func Ping(target string, timeout int) (*net.IPAddr, time.Duration, error) {
 
 	// Wait for reply
 	replyBytes := make([]byte, 1500)
-	err = conn.SetReadDeadline(time.Now().Add(time.Duration(timeout) * time.Millisecond))
+	err = conn.SetReadDeadline(time.Now().Add(timeout))
 	if err != nil {
 		return dest, 0, err
 	}
